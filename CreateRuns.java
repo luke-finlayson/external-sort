@@ -12,7 +12,7 @@ public class CreateRuns
         }
         catch (Exception e) {
             System.err.println("Invalid arguments - using default max heap size of 31");
-            maxHeap = 0;
+            maxHeap = 31;
         }
 
         // Create stream reader to read from standard input
@@ -36,23 +36,24 @@ public class CreateRuns
             // Read from the rest of the input file
             while (heap.peek() != null) {
                 // Output the smallest value in the minheap
-                String previous = heap.replace(line);
+                String previous = heap.peek();
                 System.out.println(previous);
 
-                if (smallest(line, previous)) {
-                    heap.shrink();
+                // 
+                if (smallest(line, previous) || line == null) {
+                    heap.shrink(line);
+                }
+                else {
+                    heap.replace(line);
                 }
 
-                if (line == null) {
-                    heap.capacity--;
-                }
-
-                line = reader.readLine();
-
+                // If the usable heap has now been depleted - reset to use full heap again
                 if (heap.capacity() <= 0) {
                     heap.resetCapacity();
-                    System.out.println();
                 }
+
+                // Read in the next line
+                line = reader.readLine();
             }
         }
         catch (Exception e) 
