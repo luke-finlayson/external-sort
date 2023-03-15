@@ -44,7 +44,7 @@ public class DistributeRuns {
         }
 
         // Write a line from the run to the file
-        outputs[file].write(line);
+        outputs[file].write(line + "\n");
         
         // Read the next line of input
         previous = line;
