@@ -6,13 +6,12 @@ public class CreateRuns
     public static void main(String[] args) 
     {
         // Extract max heap size from args
-        int maxHeap;
+        int maxHeap = 31;
         try {
             maxHeap = Integer.parseInt(args[0]);
         }
         catch (Exception e) {
             System.err.println("Invalid arguments - using default max heap size of 31");
-            maxHeap = 31;
         }
 
         // Create stream reader to read from standard input
@@ -40,7 +39,7 @@ public class CreateRuns
                 System.out.println(previous);
 
                 // 
-                if (smallest(line, previous) || line == null) {
+                if (Utilities.smallest(line, previous) || line == null) {
                     heap.shrink(line);
                 }
                 else {
@@ -58,19 +57,8 @@ public class CreateRuns
         }
         catch (Exception e) 
         {
-            System.out.println(heap);
+            System.out.println("Heap dump: " + heap);
             System.err.println(e);
         }
-    }
-
-    private static boolean smallest(String value1, String value2) {
-        if (value1 == null) {
-            return false;
-        }
-        if (value2 == null) {
-            return true;
-        }
-
-        return value1.compareTo(value2) < 0;
     }
 }

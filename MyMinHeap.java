@@ -122,14 +122,7 @@ public class MyMinHeap {
         String value1 = heapArray[i];
         String value2 = heapArray[j];
 
-        if (value1 == null) {
-            return false;
-        }
-        if (value2 == null) {
-            return true;
-        }
-
-        return value1.compareTo(value2) < 0;
+        return Utilities.smallest(value1, value2);
     }
 
     public String toString() {
