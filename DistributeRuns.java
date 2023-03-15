@@ -4,17 +4,14 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 
 public class DistributeRuns {
-  public static void main(String[] args) {
-    int numRuns = 2;
-    try {
-      numRuns = Integer.parseInt(args[0]);
-    }
-    catch (Exception e) {
-      System.err.println("Invalid arguments - using default number of runs");
-    }
+  public void generateFiles(int numFiles) {
+    // Default to 2 files if argument is invalid
+    if (numFiles < 2) {
+      numFiles = 2;
+    } 
 
     // Create collection of output files to write to
-    BufferedWriter[] outputs = new BufferedWriter[numRuns];
+    BufferedWriter[] outputs = new BufferedWriter[numFiles];
 
     try {
       for (int i = 0; i < outputs.length; i++) {
@@ -40,7 +37,7 @@ public class DistributeRuns {
       while (line != null) {
         // Switch files when the end of the run has been reached
         if (Utilities.smallest(line, previous)) {
-          file = (file + 1) % numRuns;
+          file = (file + 1) % numFiles;
         }
 
         // Write a line from the run to the file
