@@ -2,26 +2,39 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.Arrays;
 
 /**
  * A simple helper class to provide common tools used by all classes
  */
-public class Util {
+public class Utils {
   // Prevent instances of utilities class being created
-  private Util() {}
+  private Utils() {}
 
   /**
    * Returns true if value1 is smaller than value2
    */
-  public static boolean smallest(String value1, String value2) {
+  public static String smallest(String value1, String value2) {
+    if (value1 == null && value2 == null) {
+      return "";
+    }
     if (value1 == null) {
-        return false;
+        return value2;
     }
     if (value2 == null) {
-        return true;
+        return value1;
     }
 
-    return value1.compareTo(value2) < 0;
+    try {
+      if (value1.compareTo(value2) < 0) {
+        return value1;
+      }
+      return value2;
+    }
+    catch (Exception e) {
+      System.err.println("Compare error");
+      return "";
+    }
   }
 
   /**
@@ -38,8 +51,8 @@ public class Util {
       return writer;
     }
     catch (Exception e) {
+      System.err.println("Create file Error");
       System.err.println(e);
-
       return null;
     }
   }
@@ -63,6 +76,19 @@ public class Util {
         file.close();
       }
       catch (Exception e) {
+        System.err.println("Close files Error");
+        System.err.println(e);
+      }
+    }
+  }
+
+  public static void closeFiles(BufferedReader[] files) {
+    for (BufferedReader file : files) {
+      try {
+        file.close();
+      }
+      catch (Exception e) {
+        System.err.println("Close files Error");
         System.err.println(e);
       }
     }
@@ -88,6 +114,7 @@ public class Util {
       return outputs;
     } 
     catch (Exception e) {
+      System.err.println("Create files Error");
       System.err.println(e);
       return null;
     }
@@ -101,6 +128,7 @@ public class Util {
       return reader;
     }
     catch (Exception e) {
+      System.err.println("Open file Error");
       System.err.println(e);
       return null;
     }
@@ -118,8 +146,30 @@ public class Util {
       return inputs;
     }
     catch (Exception e) {
+      System.err.println("Open files Error");
       System.err.println(e);
       return null;
     }
+  }
+
+  public static String[] flipArray(String[] arr) {
+    // Copy first half of array into temp. array
+    String[] prevInputs = Arrays.copyOf(arr, arr.length / 2);
+    
+    // Create the new array and copy last half of original array to start of new array
+    String[] newArray = new String[arr.length];
+    System.arraycopy(arr, arr.length / 2, newArray, 0, arr.length / 2);
+    
+    // Copy the first half of the original array into the new one
+    System.arraycopy(prevInputs, 0, newArray, arr.length / 2, arr.length / 2);
+    return newArray;
+  }
+  
+  public static String[] concat(String[] arr1, String[] arr2) {
+    // Copy the contents of arr1 into a new array the lenght of both input arrays combined
+    String[] result = Arrays.copyOf(arr1, arr1.length + arr2.length);
+    // Copy the contents of arr2 into the new array and return
+    System.arraycopy(arr2, 0, result, arr1.length, arr2.length);
+    return result;
   }
 }

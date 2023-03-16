@@ -14,13 +14,13 @@ public class DistributeRuns {
     outputs = new String[this.numFiles];
 
     for (int i = 0; i < this.numFiles; i++) {
-      outputs[i] = Util.getFilename(i);
+      outputs[i] = Utils.getFilename(i);
     }
   }
 
   public boolean generateFiles() {
     // Create the file writers for the temporary run storage
-    BufferedWriter[] outputWriters = Util.createFiles(outputs);
+    BufferedWriter[] outputWriters = Utils.createFiles(outputs);
 
     if (outputWriters == null) {
       return false;
@@ -38,7 +38,7 @@ public class DistributeRuns {
       // Continously read lines from input stream
       while (line != null) {
         // Switch files when the end of the run has been reached
-        if (Util.smallest(line, previous)) {
+        if (Utils.smallest(line, previous).equals(line)) {
           file = (file + 1) % numFiles;
         }
 
@@ -50,12 +50,13 @@ public class DistributeRuns {
         line = reader.readLine();
       }
     } catch (Exception e) {
+      System.err.println("Generate Error");
       System.err.println(e);
       return false;
     }
 
     // Close the output files once finished
-    Util.closeFiles(outputWriters);
+    Utils.closeFiles(outputWriters);
     return true;
   }
 

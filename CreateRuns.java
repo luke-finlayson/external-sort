@@ -34,14 +34,14 @@ public class CreateRuns
                 line = reader.readLine();
             }
 
+            int runs = 1;
             // Read from the rest of the input file
             while (heap.peek() != null) {
                 // Output the smallest value in the minheap
                 String previous = heap.peek();
                 System.out.println(previous);
 
-                // 
-                if (Util.smallest(line, previous) || line == null) {
+                if (line == null || Utils.smallest(line, previous).equals(line)) {
                     heap.shrink(line);
                 }
                 else {
@@ -50,16 +50,20 @@ public class CreateRuns
 
                 // If the usable heap has now been depleted - reset to use full heap again
                 if (heap.capacity() <= 0) {
+                    runs++;
                     heap.resetCapacity();
                 }
 
                 // Read in the next line
                 line = reader.readLine();
             }
+
+            System.err.println(runs);
         }
         catch (Exception e) 
         {
             System.out.println("Heap dump: " + heap);
+            System.err.println("Create runs Error");
             System.err.println(e);
         }
     }
