@@ -7,10 +7,12 @@ public class CreateRuns
     {
         // Extract max heap size from args
         int maxHeap = 31;
-        try {
+        try 
+        {
             maxHeap = Integer.parseInt(args[0]);
         }
-        catch (Exception e) {
+        catch (Exception e) 
+        {
             System.err.println("Invalid arguments - using default max heap size of 31");
         }
 
@@ -39,7 +41,7 @@ public class CreateRuns
                 System.out.println(previous);
 
                 // 
-                if (Utilities.smallest(line, previous) || line == null) {
+                if (Util.smallest(line, previous) || line == null) {
                     heap.shrink(line);
                 }
                 else {
