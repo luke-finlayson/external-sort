@@ -119,44 +119,80 @@ public class MergeRuns {
         lines[i] = inputs[i].readLine();
       }
 
-      String previous = "";
-      boolean empty = false;
+      MyMinHeap heap = new MyMinHeap(lines.length);
 
-      while (!empty) {
-        String smallest = Utils.smallest(lines[0], lines[1]);
+      // Load initial lines into the heap and start merging input files
+      if (heap.load(lines)) {
+        String previous = "";
 
-        if (smallest.compareTo(previous) < 0) {
-          current = (current + 1) % outputs.length;
-          run++;
-        }
-        previous = smallest;
+        while (heap.peek() != null) {
+          String line = heap.peek();
 
-        outputs[current].write(smallest);
-        outputs[current].newLine();
+          if (line.compareTo(previous) < 0) {
+            current = (current + 1) % outputs.length;
+            run++;
+          }
+          previous = heap.peek();
 
-        // Loop through head lines and determine which file to read from next
-        // We start from the end of the array to work with the default returned from Utils.smallest
-        boolean lineRead = false;
-        for (int i = lines.length / 2; i > 0; i--) {
-          if (smallest.equals(lines[i])) {
-            lines[i] = inputs[i].readLine();
+          outputs[current].write(line);
+          outputs[current].newLine();
+
+          boolean lineRead = false;
+          for (int i = lines.length - 1; i > 0; i--) {
+            if (line.equals(lines[i])) {
+              lines[i] = inputs[i].readLine();
+              heap.replace(lines[i]);
+              lineRead = true;
+            }
+          }
+
+          // Read from first file if no other lines were read
+          if (!lineRead) {
+            lines[0] = inputs[0].readLine();
+            heap.replace(lines[0]);
             lineRead = true;
           }
         }
-
-        // Read from first file if no other lines were read
-        if (!lineRead) {
-          lines[0] = inputs[0].readLine();
-        }
-
-        // Check if there are still input lines to process
-        empty = true;
-        for (String line : lines) {
-          if (line != null) {
-            empty = false;
-          }
-        }
       }
+
+      // String previous = "";
+      // boolean empty = false;
+
+      // while (!empty) {
+      //   String smallest = Utils.smallest(lines[0], lines[1]);
+
+      //   if (smallest.compareTo(previous) < 0) {
+      //     current = (current + 1) % outputs.length;
+      //     run++;
+      //   }
+      //   previous = smallest;
+
+      //   outputs[current].write(smallest);
+      //   outputs[current].newLine();
+
+      //   // Loop through head lines and determine which file to read from next
+      //   // We start from the end of the array to work with the default returned from Utils.smallest
+      //   boolean lineRead = false;
+      //   for (int i = lines.length - 1; i > 0; i--) {
+      //     if (smallest.equals(lines[i])) {
+      //       lines[i] = inputs[i].readLine();
+      //       lineRead = true;
+      //     }
+      //   }
+
+      //   // Read from first file if no other lines were read
+      //   if (!lineRead) {
+      //     lines[0] = inputs[0].readLine();
+      //   }
+
+      //   // Check if there are still input lines to process
+      //   empty = true;
+      //   for (String line : lines) {
+      //     if (line != null) {
+      //       empty = false;
+      //     }
+      //   }
+      // }
 
       Utils.closeFiles(outputs);
       Utils.closeFiles(inputs);

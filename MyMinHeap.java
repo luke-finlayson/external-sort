@@ -70,6 +70,22 @@ public class MyMinHeap {
         downheap(1);
     }
 
+    /**
+     * Loads multiple values at once
+     * @param values
+     */
+    public boolean load(String[] values) {
+        if (values.length > capacity - next) {
+            return false;
+        }
+
+        for (String value : values) {
+            insert(value);
+        }
+        
+        return true;
+    }
+
     public void downheap() {
         downheap(1);
     }

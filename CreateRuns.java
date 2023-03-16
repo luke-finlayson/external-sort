@@ -34,7 +34,6 @@ public class CreateRuns
                 line = reader.readLine();
             }
 
-            int runs = 1;
             // Read from the rest of the input file
             while (heap.peek() != null) {
                 // Output the smallest value in the minheap
@@ -50,7 +49,6 @@ public class CreateRuns
 
                 // If the usable heap has now been depleted - reset to use full heap again
                 if (heap.capacity() <= 0) {
-                    runs++;
                     heap.resetCapacity();
                 }
 
