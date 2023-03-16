@@ -57,8 +57,6 @@ public class CreateRuns
                 // Read in the next line
                 line = reader.readLine();
             }
-
-            System.err.println(runs);
         }
         catch (Exception e) 
         {
