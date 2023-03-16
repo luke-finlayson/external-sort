@@ -1,3 +1,5 @@
+import java.io.BufferedReader;
+
 public class MergeRuns {
   public static void main(String[] args) {
     int numFiles = 2;
@@ -13,8 +15,8 @@ public class MergeRuns {
 
     // Only continue with sort if file generation was successfull
     if (distributer.generateFiles()) {
-      // Create the output files
-      
+      // Open the files created by the run distributer
+      BufferedReader[] readers = Util.openFiles(distributer.getFilenames());
     }
   }
 }

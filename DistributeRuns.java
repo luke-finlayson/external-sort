@@ -4,17 +4,25 @@ import java.io.InputStreamReader;
 
 public class DistributeRuns {
   private int numFiles;
+  private String[] outputs;
 
   public DistributeRuns(int numFiles) {
     // Default to 2 files if argument is invalid
     this.numFiles = (numFiles < 2) ? 2 : numFiles;
+    
+    // Generate the required output filenames
+    outputs = new String[this.numFiles];
+
+    for (int i = 0; i < this.numFiles; i++) {
+      outputs[i] = Util.getFilename(i);
+    }
   }
 
   public boolean generateFiles() {
     // Create the file writers for the temporary run storage
-    BufferedWriter[] outputs = Util.createFiles(numFiles);
+    BufferedWriter[] outputWriters = Util.createFiles(outputs);
 
-    if (outputs == null) {
+    if (outputWriters == null) {
       return false;
     }
 
@@ -35,7 +43,7 @@ public class DistributeRuns {
         }
 
         // Write a line from the run to the file
-        outputs[file].write(line + "\n");
+        outputWriters[file].write(line + "\n");
 
         // Read the next line of input
         previous = line;
@@ -47,7 +55,11 @@ public class DistributeRuns {
     }
 
     // Close the output files once finished
-    Util.closeFiles(outputs);
+    Util.closeFiles(outputWriters);
     return true;
+  }
+
+  public String[] getFilenames() {
+    return outputs;
   }
 }

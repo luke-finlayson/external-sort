@@ -1,4 +1,6 @@
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 
 /**
@@ -72,14 +74,14 @@ public class Util {
    * @param numReaders The number of files to create
    * @return Returns the array of buffered writers
    */
-  public static BufferedWriter[] createFiles(int numReaders) {
+  public static BufferedWriter[] createFiles(String[] filenames) {
     // Create collection of output files to write to
-    BufferedWriter[] outputs = new BufferedWriter[numReaders];
+    BufferedWriter[] outputs = new BufferedWriter[filenames.length];
 
     try {
       // Initialise a file writer for each 'file' in the outputs array
       for (int i = 0; i < outputs.length; i++) {
-        BufferedWriter writer = Util.createFile(Util.getFilename(i));
+        BufferedWriter writer = createFile(filenames[i]);
         outputs[i] = writer;
       }
 
@@ -87,9 +89,37 @@ public class Util {
     } 
     catch (Exception e) {
       System.err.println(e);
+      return null;
     }
+  }
 
-    // Return null if anyuthing goes wrong
-    return null;
+  public static BufferedReader openFile(String filename) {
+    try {
+      FileReader file = new FileReader(filename);
+      BufferedReader reader = new BufferedReader(file);
+
+      return reader;
+    }
+    catch (Exception e) {
+      System.err.println(e);
+      return null;
+    }
+  }
+
+  public static BufferedReader[] openFiles(String[] filenames) {
+    BufferedReader[] inputs = new BufferedReader[filenames.length];
+
+    try {
+      for (int i = 0; i < inputs.length; i++) {
+        BufferedReader reader = openFile(filenames[i]);
+        inputs[i] = reader;
+      }
+
+      return inputs;
+    }
+    catch (Exception e) {
+      System.err.println(e);
+      return null;
+    }
   }
 }
