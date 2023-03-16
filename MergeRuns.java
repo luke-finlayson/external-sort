@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.nio.Buffer;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -112,12 +113,17 @@ public class MergeRuns {
     int run = 1;
 
     try {
-      String line1 = inputs[0].readLine();
-      String line2 = inputs[1].readLine();
-      String previous = "";
+      // Read in initial lines
+      String[] lines = new String[inputs.length];
+      for (int i = 0; i < inputs.length; i++) {
+        lines[i] = inputs[i].readLine();
+      }
 
-      while (line1 != null && line2 != null) {
-        String smallest = Utils.smallest(line1, line2);
+      String previous = "";
+      boolean empty = false;
+
+      while (!empty) {
+        String smallest = Utils.smallest(lines[0], lines[1]);
 
         if (smallest.compareTo(previous) < 0) {
           current = (current + 1) % outputs.length;
@@ -128,24 +134,28 @@ public class MergeRuns {
         outputs[current].write(smallest);
         outputs[current].newLine();
 
-        if (smallest.equals(line2)) {
-          line2 = inputs[1].readLine();
+        // Loop through head lines and determine which file to read from next
+        // We start from the end of the array to work with the default returned from Utils.smallest
+        boolean lineRead = false;
+        for (int i = lines.length / 2; i > 0; i--) {
+          if (smallest.equals(lines[i])) {
+            lines[i] = inputs[i].readLine();
+            lineRead = true;
+          }
         }
-        else {
-          line1 = inputs[0].readLine();
+
+        // Read from first file if no other lines were read
+        if (!lineRead) {
+          lines[0] = inputs[0].readLine();
         }
-      }
 
-      while (line1 != null) {
-        outputs[current].write(line1);
-        outputs[current].newLine();
-        line1 = inputs[0].readLine();
-      }
-
-      while (line2 != null) {
-        outputs[current].write(line2);
-        outputs[current].newLine();
-        line2 = inputs[1].readLine();
+        // Check if there are still input lines to process
+        empty = true;
+        for (String line : lines) {
+          if (line != null) {
+            empty = false;
+          }
+        }
       }
 
       Utils.closeFiles(outputs);
@@ -156,6 +166,7 @@ public class MergeRuns {
     catch (Exception e) {
       System.err.println("Merging Error");
       System.err.println(e);
+      System.err.println("\t on run " + run);
 
       return new int[] { -1, run};
     }
