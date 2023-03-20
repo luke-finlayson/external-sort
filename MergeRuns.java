@@ -113,40 +113,64 @@ public class MergeRuns {
     int run = 1;
 
     try {
-      // Read in initial lines
-      String[] lines = new String[inputs.length];
-      for (int i = 0; i < inputs.length; i++) {
-        lines[i] = inputs[i].readLine();
-      }
+      // // Read in initial lines
+      // String[] lines = new String[inputs.length];
+      // for (int i = 0; i < inputs.length; i++) {
+      //   lines[i] = inputs[i].readLine();
+      // }
 
-      MyMinHeap heap = new MyMinHeap(lines.length);
+      // MyMinHeap heap = new MyMinHeap(lines.length);
 
-      // Load initial lines into the heap and start merging input files
-      if (heap.load(lines)) {
-        String previous = "";
+      // // Load initial lines into the heap and start merging input files
+      // if (heap.load(lines)) {
+      //   String previous = "";
 
-        while (heap.peek() != null) {
-          String line = heap.peek();
+      //   while (heap.peek() != null) {
+      //     String line = heap.peek();
 
-          if (line.compareTo(previous) < 0) {
-            current = (current + 1) % outputs.length;
-            run++;
-          }
-          previous = heap.peek();
+      //     if (line.compareTo(previous) < 0) {
+      //       current = (current + 1) % outputs.length;
+      //       run++;
+      //     }
+      //     previous = heap.peek();
 
-          outputs[current].write(line);
-          outputs[current].newLine();
+      //     outputs[current].write(line);
+      //     outputs[current].newLine();
 
-          boolean lineRead = false;
-          for (int i = lines.length - 1; i > 0; i--) {
-            if (line.equals(lines[i])) {
-              lines[i] = inputs[i].readLine();
-              heap.replace(lines[i]);
+      //     boolean lineRead = false;
+      //     for (int i = lines.length - 1; i > 0; i--) {
+      //       if (line.equals(lines[i])) {
+      //         lines[i] = inputs[i].readLine();
+      //         heap.replace(lines[i]);
               
-              lineRead = true;
-              break;
-            }
-          }
+      //         lineRead = true;
+      //         break;
+      //       }
+      //     }
+      //   }
+      // }
+
+      String line1 = inputs[0].readLine();
+      String line2 = inputs[1].readLine();
+      String previous = "";
+
+      while (line1 != null || line2 != null) {
+        String smallest = Utils.smallest(line1, line2);
+
+        if (smallest.compareTo(previous) < 0) {
+          current = (current + 1) % outputs.length;
+          run++;
+        }
+        previous = smallest;
+
+        outputs[current].write(smallest);
+        outputs[current].newLine();
+
+        if (smallest.equals(line2)) {
+          line2 = inputs[1].readLine();
+        }
+        else {
+          line1 = inputs[0].readLine();
         }
       }
 
