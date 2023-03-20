@@ -1,5 +1,5 @@
 public class MyMinHeap {
-    public final String[] heapArray;
+    public final Node[] heapArray;
     /**
      * The next available position in the heap
      */
@@ -21,7 +21,7 @@ public class MyMinHeap {
         // Initialise starting position
         next = 1;
 
-        this.heapArray = new String[this.capacity];
+        this.heapArray = new Node[this.capacity];
     }
 
     /**
@@ -29,30 +29,42 @@ public class MyMinHeap {
      * @param value The new value to insert into the heap
      */
     public void insert(String value) {
+        insert(value, -1);
+    };
+
+    public void insert(String value, int key) {
         // Don't insert if heap is full
         if (next > capacity) {
             System.err.println("Insert Error: Full");
             return;
         }
 
-        heapArray[next] = value;
+        heapArray[next] = new Node(value, key);
         upheap(next);
         next++;
-    };
+    }
 
     public void replace(String value) {
-        heapArray[1] = value;
-        downheap(1);
+        replace(value, -1);
+    }
+
+    public void replace(String value, int key) {
+        heapArray[1] = new Node(value, key);
+        downheap();
     }
 
     /**
      * Get the smallest value in the heap
      * @return The smallest value in the heap
      */
-    public String peek() { return heapArray[1]; }
+    public String peek() { return heapArray[1].toString(); }
 
     public void shrink(String value) {
-        heapArray[1] = value;
+        shrink(value, -1);
+    }
+
+    public void shrink(String value, int key) {
+        heapArray[1] = new Node(value, key);
         swap(1, next - 1);
         
         // Shrink the maximum capacity to "ignore" the smaller numbers
@@ -124,7 +136,7 @@ public class MyMinHeap {
     }
 
     private void swap(int i, int j) {
-        String temp = heapArray[i];
+        Node temp = heapArray[i];
         heapArray[i] = heapArray[j];
         heapArray[j] = temp;
     }
@@ -135,8 +147,8 @@ public class MyMinHeap {
      * @param j The index of a value in the heap array
      */
     private boolean smallest(int i, int j) {
-        String value1 = heapArray[i];
-        String value2 = heapArray[j];
+        String value1 = heapArray[i].toString();
+        String value2 = heapArray[j].toString();
 
         return Utils.smallest(value1, value2).equals(value1);
     }

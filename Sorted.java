@@ -4,10 +4,33 @@ import java.io.InputStreamReader;
 
 public class Sorted {
   public static void main(String[] args) {
+    int expectedLines = 0;
     BufferedReader reader;
+    
+    // Count the number of expected lines
     if (args.length > 0 && args[0] != null) {
       try {
         FileReader file = new FileReader(args[0]);
+        reader = new BufferedReader(file);
+
+        while (reader.readLine() != null) {
+          expectedLines++;
+        }
+      }
+      catch (Exception e) {
+        System.err.println("[Sorted] Error - undefined source file");
+        return;
+      }
+    }
+    else {
+      System.err.println("[Sorted] Error - undefined source file");
+      return;
+    }
+
+    // Create the input reader
+    if (args.length > 1 && args[1] != null) {
+      try {
+        FileReader file = new FileReader(args[1]);
         reader = new BufferedReader(file);
       }
       catch(Exception e) {
@@ -20,13 +43,14 @@ public class Sorted {
       reader = new BufferedReader(input);
     }
 
-    System.out.println(checkInput(reader));
+    System.out.println(checkInput(reader, expectedLines));
   }
 
-  private static boolean checkInput(BufferedReader reader) {
+  private static boolean checkInput(BufferedReader reader, int expectedLines) {
     try {
       String line = reader.readLine();
       String previous = "";
+      int linesRead = 0;
 
       while (line != null) {
         if (line.compareTo(previous) < 0) {
@@ -34,6 +58,13 @@ public class Sorted {
         }
         previous = line;
         line = reader.readLine();
+
+        linesRead++;
+      }
+
+      if (linesRead != expectedLines) {
+        System.out.println("Expected " + expectedLines + " lines, got " + linesRead);
+        return false;
       }
 
       // String line = reader.readLine();

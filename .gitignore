@@ -1,3 +1,4 @@
 *.temp
 *.class
 *.sorted
+.DS_Store

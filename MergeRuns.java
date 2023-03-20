@@ -1,6 +1,6 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.nio.Buffer;
+import java.lang.reflect.Array;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -142,57 +142,13 @@ public class MergeRuns {
             if (line.equals(lines[i])) {
               lines[i] = inputs[i].readLine();
               heap.replace(lines[i]);
+              
               lineRead = true;
+              break;
             }
-          }
-
-          // Read from first file if no other lines were read
-          if (!lineRead) {
-            lines[0] = inputs[0].readLine();
-            heap.replace(lines[0]);
-            lineRead = true;
           }
         }
       }
-
-      // String previous = "";
-      // boolean empty = false;
-
-      // while (!empty) {
-      //   String smallest = Utils.smallest(lines[0], lines[1]);
-
-      //   if (smallest.compareTo(previous) < 0) {
-      //     current = (current + 1) % outputs.length;
-      //     run++;
-      //   }
-      //   previous = smallest;
-
-      //   outputs[current].write(smallest);
-      //   outputs[current].newLine();
-
-      //   // Loop through head lines and determine which file to read from next
-      //   // We start from the end of the array to work with the default returned from Utils.smallest
-      //   boolean lineRead = false;
-      //   for (int i = lines.length - 1; i > 0; i--) {
-      //     if (smallest.equals(lines[i])) {
-      //       lines[i] = inputs[i].readLine();
-      //       lineRead = true;
-      //     }
-      //   }
-
-      //   // Read from first file if no other lines were read
-      //   if (!lineRead) {
-      //     lines[0] = inputs[0].readLine();
-      //   }
-
-      //   // Check if there are still input lines to process
-      //   empty = true;
-      //   for (String line : lines) {
-      //     if (line != null) {
-      //       empty = false;
-      //     }
-      //   }
-      // }
 
       Utils.closeFiles(outputs);
       Utils.closeFiles(inputs);
