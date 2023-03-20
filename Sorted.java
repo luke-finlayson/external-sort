@@ -1,91 +1,42 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
-import java.io.InputStreamReader;
 
 public class Sorted {
   public static void main(String[] args) {
-    int expectedLines = 0;
-    BufferedReader reader;
-    
-    // Count the number of expected lines
-    if (args.length > 0 && args[0] != null) {
-      try {
-        FileReader file = new FileReader(args[0]);
-        reader = new BufferedReader(file);
-
-        while (reader.readLine() != null) {
-          expectedLines++;
-        }
-      }
-      catch (Exception e) {
-        System.err.println("[Sorted] Error - undefined source file");
-        return;
-      }
-    }
-    else {
-      System.err.println("[Sorted] Error - undefined source file");
-      return;
-    }
-
-    // Create the input reader
-    if (args.length > 1 && args[1] != null) {
-      try {
-        FileReader file = new FileReader(args[1]);
-        reader = new BufferedReader(file);
-      }
-      catch(Exception e) {
-        InputStreamReader input = new InputStreamReader(System.in);
-        reader = new BufferedReader(input);
-      }
-    }
-    else {
-      InputStreamReader input = new InputStreamReader(System.in);
-      reader = new BufferedReader(input);
-    }
-
-    System.out.println(checkInput(reader, expectedLines));
-  }
-
-  private static boolean checkInput(BufferedReader reader, int expectedLines) {
     try {
-      String line = reader.readLine();
-      String previous = "";
-      int linesRead = 0;
+      File sorted = new File(args[1]); // hardcoded output
+      File original = new File(args[0]); // input file
+      BufferedReader br = new BufferedReader(new FileReader(sorted));
 
-      while (line != null) {
-        if (line.compareTo(previous) < 0) {
-          return false;
-        }
-        previous = line;
-        line = reader.readLine();
-
-        linesRead++;
+      if (sorted.length() == original.length()) { // checks if anything has been lost
+          String one = br.readLine();
+          String two = br.readLine();
+          int compare = one.compareTo(two);
+          while (compare <= 0) { // loop to check order
+              one = two;
+              two = br.readLine();
+              if (two == null)
+                  break;
+              else
+                  compare = one.compareTo(two);
+          }
+          if (compare > 0) { // print out the place where there is an issue for err checking
+              System.out.println(one);
+              System.out.println(two);
+          } else
+              System.out.println("Alphabetical order check sucsessful!");
+      } else {
+          System.out.println(
+              "File Sizes Don't Match" + 
+              "\nExpected " + original.length() + 
+              ", got " + sorted.length()
+            );
       }
-
-      if (linesRead != expectedLines) {
-        System.out.println("Expected " + expectedLines + " lines, got " + linesRead);
-        return false;
-      }
-
-      // String line = reader.readLine();
-      // List<String> lines = new ArrayList<>();
-
-      // while (line != null) {
-      //   lines.add(line);
-      //   line = reader.readLine();
-      // }
-
-      // System.err.println(lines);
-
-      // lines.sort(null);
-
-      // System.err.println(lines);
-
-      return true;
-    }
-    catch (Exception e) {
-      System.err.println(e);
-      return false;
+      br.close();
+    } catch (Exception e) {
+        // e.printStackTrace();
+        System.err.println("No File Found");
     }
   }
 }

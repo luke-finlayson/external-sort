@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class MyMinHeap {
     public final Node[] heapArray;
     /**
@@ -57,7 +59,7 @@ public class MyMinHeap {
      * Get the smallest value in the heap
      * @return The smallest value in the heap
      */
-    public String peek() { return heapArray[1].toString(); }
+    public Node peek() { return heapArray[1]; }
 
     public void shrink(String value) {
         shrink(value, -1);
@@ -91,8 +93,8 @@ public class MyMinHeap {
             return false;
         }
 
-        for (String value : values) {
-            insert(value);
+        for (int i = 0; i < values.length; i++) {
+            insert(values[i], i);
         }
         
         return true;
@@ -160,7 +162,7 @@ public class MyMinHeap {
                 output += "| ";
             }
             
-            output += heapArray[i];
+            output += heapArray[i].toString();
 
             if (i != maxSize - 1) {
                 output += ", ";

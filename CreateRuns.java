@@ -35,9 +35,9 @@ public class CreateRuns
             }
 
             // Read from the rest of the input file
-            while (heap.peek() != null) {
+            while (heap.peek().toString() != null) {
                 // Output the smallest value in the minheap
-                String previous = heap.peek();
+                String previous = heap.peek().toString();
                 System.out.println(previous);
 
                 if (line == null || Utils.smallest(line, previous).equals(line)) {
