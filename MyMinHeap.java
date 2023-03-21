@@ -1,7 +1,5 @@
-import java.util.Arrays;
-
 public class MyMinHeap {
-    public final Node[] heapArray;
+    public Node[] heapArray;
     /**
      * The next available position in the heap
      */
@@ -81,7 +79,7 @@ public class MyMinHeap {
     public void resetCapacity() {
         capacity = this.maxSize;
         next = capacity;
-        downheap(1);
+        reheap();
     }
 
     /**
@@ -137,6 +135,24 @@ public class MyMinHeap {
         }
     }
 
+    /**
+     * Reorders the heap back into order
+     */
+    private void reheap() {
+        Node[] temp = heapArray;
+        clearHeap();
+
+        for (int i = 1; i < heapArray.length; i++) {
+            insert(temp[i].toString(), temp[i].key);
+        }
+    }
+
+    private void clearHeap() {
+        heapArray = new Node[maxSize];
+        next = 1;
+        capacity = maxSize;
+    }
+
     private void swap(int i, int j) {
         Node temp = heapArray[i];
         heapArray[i] = heapArray[j];
@@ -149,10 +165,15 @@ public class MyMinHeap {
      * @param j The index of a value in the heap array
      */
     private boolean smallest(int i, int j) {
-        String value1 = heapArray[i].toString();
-        String value2 = heapArray[j].toString();
+        String value1 = value(i);
+        String value2 = value(j);
 
-        return Utils.smallest(value1, value2).equals(value1);
+        try {
+            return Utils.smallest(value1, value2).equals(value1);
+        }
+        catch (Exception e) {
+            return true;
+        }
     }
 
     public String toString() {
@@ -162,7 +183,7 @@ public class MyMinHeap {
                 output += "| ";
             }
             
-            output += heapArray[i].toString();
+            output += value(i);
 
             if (i != maxSize - 1) {
                 output += ", ";
@@ -171,6 +192,16 @@ public class MyMinHeap {
         output += " ]";
 
         return output;
+    }
+
+    private String value(int i) {
+        Node node = heapArray[i];
+
+        if (node == null) {
+            return "";
+        }
+        
+        return node.toString();
     }
 
     private int parent(int i) {

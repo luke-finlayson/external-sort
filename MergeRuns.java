@@ -7,6 +7,9 @@ import java.util.Arrays;
 
 public class MergeRuns {
   public static void main(String[] args) {
+    Timer timer = new Timer("Merge Complete");
+    timer.start();
+
     int numFiles = 2;
     try {
       numFiles = Integer.parseInt(args[0]);
@@ -28,6 +31,7 @@ public class MergeRuns {
 
       // An array containing the input and output filenames - first half inputs, second half outputs
       String[] filenames = Utils.concat(distributer.getFilenames(), outputNames);
+      boolean flipped = false;
 
       // Open the initial input and output files
       BufferedReader[] inputs = getInputs(filenames);
@@ -41,12 +45,13 @@ public class MergeRuns {
         
         // Switch inputs and outputs
         filenames = Utils.flipArray(filenames);
+        flipped = !flipped;
         inputs = getInputs(filenames);
         outputs = getOutputs(filenames);
       } 
       while (mergeResult[1] > 1);
 
-      String outputFile = Utils.getFilename(mergeResult[0] + numFiles);
+      String outputFile = Utils.getFilename(mergeResult[0] + (flipped ? numFiles : 0));
       BufferedReader output = Utils.openFile(outputFile);
       
       try {
@@ -71,6 +76,9 @@ public class MergeRuns {
       catch (Exception e) {
         System.err.println(e);
       }
+
+      timer.end();
+      System.err.println(timer);
     }
   }
 
@@ -136,6 +144,7 @@ public class MergeRuns {
           outputs[current].write(line.toString());
           outputs[current].newLine();
 
+          // Read in another line from the file that the previous line was from
           int i = line.key;
           lines[i] = inputs[i].readLine();
           heap.replace(lines[i], i);
@@ -148,7 +157,7 @@ public class MergeRuns {
       return new int[] { current, run };
     }
     catch (Exception e) {
-      System.err.println("Merging Error");
+      System.err.println("\u001b[31m[Merging Error]\u001b[0m");
       System.err.println(e);
       System.err.println("\t on run " + run);
 

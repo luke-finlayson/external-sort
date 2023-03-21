@@ -5,6 +5,9 @@ public class CreateRuns
 {
     public static void main(String[] args) 
     {
+        Timer timer = new Timer("Run creation");
+        timer.start();
+        
         // Extract max heap size from args
         int maxHeap = 31;
         try 
@@ -55,10 +58,12 @@ public class CreateRuns
                 // Read in the next line
                 line = reader.readLine();
             }
+
+            timer.end();
+            System.err.println(timer);
         }
         catch (Exception e) 
         {
-            System.out.println("Heap dump: " + heap);
             System.err.println("Create runs Error");
             System.err.println(e);
         }

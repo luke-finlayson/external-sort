@@ -16,7 +16,7 @@ public class Utils {
    */
   public static String smallest(String value1, String value2) {
     if (value1 == null && value2 == null) {
-      return "";
+      return null;
     }
     if (value1 == null) {
         return value2;

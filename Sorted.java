@@ -25,7 +25,7 @@ public class Sorted {
               System.out.println(one);
               System.out.println(two);
           } else
-              System.out.println("Alphabetical order check sucsessful!");
+              System.out.println("\n\u001b[32m\u001b[1m[File is sorted!]\u001b[0m");
       } else {
           System.out.println(
               "File Sizes Don't Match" + 
