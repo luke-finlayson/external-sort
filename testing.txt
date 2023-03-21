@@ -1,2 +1,0 @@
-filename      memory    files   runtime   mergetime
-large.txt     512       100     597       3999

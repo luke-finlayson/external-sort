@@ -2,3 +2,4 @@
 *.class
 *.sorted
 .DS_Store
+test-files/massive.txt
