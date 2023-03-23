@@ -5,11 +5,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 
+/**
+ * Created by Luke Finlayson - 1557835
+ * 
+ * Distributes runs from standard input into a given number of input files - then merge sorts into the same number of output files.
+ * Program completes when one of the output files contains the fully sorted data - and outputs contents to standard output.
+ * 
+ * Usage: java MergeRuns [number of files]
+ */
 public class MergeRuns {
   public static void main(String[] args) {
     Timer timer = new Timer("Merge Complete");
     timer.start();
 
+    // Try to get the number of input/output files to use from program arguments - otherwise just use 2 files
     int numFiles = 2;
     try {
       numFiles = Integer.parseInt(args[0]);
@@ -37,8 +46,9 @@ public class MergeRuns {
       BufferedReader[] inputs = getInputs(filenames);
       BufferedWriter[] outputs = getOutputs(filenames);
       int[] mergeResult;
+      int passes = 0;
 
-      // Loop until only one run remains
+      // Loop until one of the output files contains the sorted contents of the 
       do {
         // Merge inputs into outputs
         mergeResult = merge(inputs, outputs);
@@ -48,12 +58,16 @@ public class MergeRuns {
         flipped = !flipped;
         inputs = getInputs(filenames);
         outputs = getOutputs(filenames);
+
+        passes++;
       } 
       while (mergeResult[1] > 1);
 
+      // Determine which output file contains the sorted data
       String outputFile = Utils.getFilename(mergeResult[0] + (flipped ? numFiles : 0));
       BufferedReader output = Utils.openFile(outputFile);
       
+      // Output the sorted contents to standard output
       try {
         String line = output.readLine();
 
@@ -77,7 +91,9 @@ public class MergeRuns {
         System.err.println(e);
       }
 
+      // Output the time taken to merge sort the input files
       timer.end();
+      timer.setLabel("Merge complete (" + passes + " passes)");
       System.err.println(timer);
     }
   }

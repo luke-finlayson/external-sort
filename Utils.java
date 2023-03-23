@@ -5,14 +5,16 @@ import java.io.FileWriter;
 import java.util.Arrays;
 
 /**
- * A simple helper class to provide common tools used by all classes
+ * Created by Luke Finlayson - 1557835
+ * 
+ * A helper class to provide common tools used by the various components of the External Sort program
  */
 public class Utils {
   // Prevent instances of utilities class being created
   private Utils() {}
 
   /**
-   * Returns true if value1 is smaller than value2
+   * Returns the smaller of the two values - or value2 if they are equal
    */
   public static String smallest(String value1, String value2) {
     if (value1 == null && value2 == null) {
@@ -82,6 +84,10 @@ public class Utils {
     }
   }
 
+  /**
+   * Safely close each of the given file readers
+   * @param files The file readers to close
+   */
   public static void closeFiles(BufferedReader[] files) {
     for (BufferedReader file : files) {
       try {
@@ -120,6 +126,11 @@ public class Utils {
     }
   }
 
+  /**
+   * Atetmpts to open the given file
+   * @param filename The filename of the file to open
+   * @return Returns the file reader - or null if the file was unable to be opened
+   */
   public static BufferedReader openFile(String filename) {
     try {
       FileReader file = new FileReader(filename);
@@ -134,6 +145,11 @@ public class Utils {
     }
   }
 
+  /**
+   * Open a buffered reader for each of the given files
+   * @param filenames The files to open
+   * @return Returns the array of file readers - or null if they were unable to be opened
+   */
   public static BufferedReader[] openFiles(String[] filenames) {
     BufferedReader[] inputs = new BufferedReader[filenames.length];
 
@@ -152,23 +168,29 @@ public class Utils {
     }
   }
 
+  /**
+   * Splits the array in two and switches the poition of the two halfs
+   * @param arr The original array to flip
+   * @return The resulting array - where the first half of the original is now the second half and vice versa
+   */
   public static String[] flipArray(String[] arr) {
-    // Copy first half of array into temp. array
     String[] prevInputs = Arrays.copyOf(arr, arr.length / 2);
     
-    // Create the new array and copy last half of original array to start of new array
     String[] newArray = new String[arr.length];
     System.arraycopy(arr, arr.length / 2, newArray, 0, arr.length / 2);
     
-    // Copy the first half of the original array into the new one
     System.arraycopy(prevInputs, 0, newArray, arr.length / 2, arr.length / 2);
     return newArray;
   }
   
+  /**
+   * Concatanates two arrays into one array
+   * @param arr1 The first array - this will be the first half of the new array
+   * @param arr2 The second array - this will be the second half of the new array
+   * @return The resulting array containing all elements of the input arrays
+   */
   public static String[] concat(String[] arr1, String[] arr2) {
-    // Copy the contents of arr1 into a new array the lenght of both input arrays combined
     String[] result = Arrays.copyOf(arr1, arr1.length + arr2.length);
-    // Copy the contents of arr2 into the new array and return
     System.arraycopy(arr2, 0, result, arr1.length, arr2.length);
     return result;
   }
