@@ -194,6 +194,11 @@ public class MyMinHeap {
         return output;
     }
 
+    /**
+     * Returns the value of an item in the heap
+     * @param i The index of the item in the heap
+     * @return The value of that element in the heap
+     */
     private String value(int i) {
         Node node = heapArray[i];
 
